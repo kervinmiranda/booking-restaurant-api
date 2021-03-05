@@ -12,14 +12,12 @@ public class BookingResponse<T> implements Serializable {
 	private T data;
 
 	public BookingResponse(String status, String code, String message) {
-		super();
 		this.status = status;
 		this.code = code;
 		this.message = message;
 	}
 
 	public BookingResponse(String status, String code, String message, T data) {
-		super();
 		this.status = status;
 		this.code = code;
 		this.message = message;
