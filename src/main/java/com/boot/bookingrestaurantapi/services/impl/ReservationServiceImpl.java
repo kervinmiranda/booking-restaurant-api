@@ -17,6 +17,7 @@ import com.boot.bookingrestaurantapi.jsons.ReservationRest;
 import com.boot.bookingrestaurantapi.repositories.ReservationRepository;
 import com.boot.bookingrestaurantapi.repositories.RestaurantRepository;
 import com.boot.bookingrestaurantapi.repositories.TurnRepository;
+import com.boot.bookingrestaurantapi.services.EmailService;
 import com.boot.bookingrestaurantapi.services.ReservationService;
 
 @Service
@@ -32,6 +33,9 @@ public class ReservationServiceImpl implements ReservationService {
 
 	@Autowired
 	private ReservationRepository reservationRepository;
+
+	@Autowired
+	private EmailService emailService;
 
 	public static final ModelMapper modelMapper = new ModelMapper();
 
@@ -59,6 +63,8 @@ public class ReservationServiceImpl implements ReservationService {
 		reservation.setDate(createReservationRest.getDate());
 		reservation.setRestaurant(restaurantId);
 		reservation.setTurn(turn.getName());
+		reservation.setName(createReservationRest.getName());
+		reservation.setEmail(createReservationRest.getEmail());
 
 		try {
 			reservationRepository.save(reservation);
@@ -66,6 +72,9 @@ public class ReservationServiceImpl implements ReservationService {
 			LOOGER.error("INTERNAL_SERVER_ERROR", e);
 			throw new InternalServerErrorException("INTERNAL_SERVER_ERROR", "INTERNAL_SERVER_ERROR");
 		}
+
+		this.emailService.processSendEmail(createReservationRest.getEmail(), "RESERVATION",
+				createReservationRest.getName());
 
 		return locator;
 	}
