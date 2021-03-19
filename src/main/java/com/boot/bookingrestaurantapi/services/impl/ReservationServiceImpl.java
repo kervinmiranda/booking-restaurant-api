@@ -78,6 +78,19 @@ public class ReservationServiceImpl implements ReservationService {
 
 		return locator;
 	}
+	
+	public void updateReservation(final Boolean payment, String locator) throws BookingException {
+		final Reservation reservation = reservationRepository.findByLocator(locator).orElseThrow(() -> new NotFountException("CODE_LOCATOR_NOT_FOUND", "CODE_LOCATOR_NOT_FOUND"));
+		reservation.setPayment(payment);
+		try {
+			reservationRepository.save(reservation);
+		} catch (final Exception e) {
+			LOOGER.error("INTERNAL_SERVER_ERROR", e);
+			throw new InternalServerErrorException("INTERNAL_SERVER_ERROR", "INTERNAL_SERVER_ERROR");
+		}
+		
+	}
+
 
 	private String generateLocator(Restaurant restaurantId, CreateReservationRest createReservationRest)
 			throws BookingException {
@@ -88,5 +101,5 @@ public class ReservationServiceImpl implements ReservationService {
 		return reservationRepository.findById(reservationId)
 				.orElseThrow(() -> new NotFountException("SNOT-404-2", "RESERVATION_NOT_FOUND"));
 	}
-
+	
 }
