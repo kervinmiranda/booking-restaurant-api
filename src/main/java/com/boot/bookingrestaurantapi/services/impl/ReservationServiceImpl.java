@@ -74,7 +74,7 @@ public class ReservationServiceImpl implements ReservationService {
 		}
 
 		this.emailService.processSendEmail(createReservationRest.getEmail(), "RESERVATION",
-				createReservationRest.getName());
+			createReservationRest.getName());
 
 		return locator;
 	}
